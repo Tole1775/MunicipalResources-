@@ -1,0 +1,37 @@
+<?php
+/**
+ * MunicipalResources Repository Credential Interceptor
+ * Verifies active municipal session credentials before rendering resources.
+ */
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+function validate_municipal_credentials() {
+    // Check if session tokens and municipal credentials exist in storage
+    if (!isset($_SESSION['municipal_user_id']) || !isset($_SESSION['repo_auth_token'])) {
+        return false;
+    }
+
+    $userId = $_SESSION['municipal_user_id'];
+    $authToken = $_SESSION['repo_auth_token'];
+
+    // In a production repository environment, this queries the local municipal SQLite/MySQL store
+    // Example validation check against mock session store
+    $isAuthorized = (isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true);
+
+    return $isAuthorized;
+}
+
+// Enforce immediate termination if credentials are not present
+if (!validate_municipal_credentials()) {
+    // Suppress all output and terminate execution silently or with 403
+    header('HTTP/1.1 403 Forbidden');
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        echo json_encode(["status" => "error", "message" => "Access denied. Valid municipal repository credentials required."]);
+    } else {
+        include(__DIR__ . '/../errors/403_restricted.php');
+    }
+    exit;
+}
+?>
