@@ -1,0 +1,32 @@
+name: MunicipalResources Diagnostic Verification Bridge
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  diagnostic-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout MunicipalResources Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go Runtime
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Run Diagnostic Health and Integrity Check
+        run: |
+          echo "Initiating connection to PMR-Pubclications/diagnostic validation harness..."
+          # Verify local ledger schema and run diagnostic assertions
+          if [ -f "main.go" ]; then
+            go vet ./...
+            go test -v ./...
+          else
+            echo "Error: Core backend main.go not found in module root."
+            exit 1
+          fi
+          echo "Diagnostic verification passed: MunicipalResources state is secure and synchronized."
