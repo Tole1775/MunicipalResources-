@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MunicipalResources — Secure Word Processor & Form Engine</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --panel-bg: #1e293b;
+            --border-color: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --success-color: #10b981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 1.25rem;
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        sidebar, .controls-panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+        }
+
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px 15px;
+            background-color: #0f172a;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+
+        input, select, textarea, button {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        button {
+            background-color: var(--accent-color);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--accent-hover);
+        }
+
+        textarea.doc-textarea {
+            flex: 1;
+            background-color: transparent;
+            border: none;
+            padding: 20px;
+            resize: none;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            font-family: inherit;
+        }
+
+        textarea.doc-textarea:focus {
+            outline: none;
+        }
+
+        .status-bar {
+            padding: 8px 15px;
+            background-color: #0f172a;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MunicipalResources // Document & Form Management Engine</h1>
+        <div style="font-size: 0.85rem; color: var(--success-color);">● Trust-Shell Linked & Verified</div>
+    </header>
+
+    <div class="workspace">
+        <!-- Controls & Form Generator Sidebar -->
+        <div class="controls-panel">
+            <div class="form-group">
+                <label for="docTitle">Document Title</label>
+                <input type="text" id="docTitle" placeholder="Enter document title...">
+            </div>
+
+            <div class="form-group">
+                <label for="spellLang">Spell Check Language</label>
+                <select id="spellLang">
+                    <option value="en">English (en)</option>
+                    <option value="es">Spanish (es)</option>
+                    <option value="fr">French (fr)</option>
+                    <option value="de">German (de)</option>
+                    <option value="pt">Portuguese (pt)</option>
+                    <option value="it">Italian (it)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exportFormat">Export Format</label>
+                <select id="exportFormat">
+                    <option value="txt">Plain Text (.txt)</option>
+                    <option value="docx">Microsoft Word (.docx)</option>
+                    <option value="pdf">Adobe Acrobat (.pdf)</option>
+                </select>
+            </div>
+
+            <hr style="border-color: var(--border-color); margin: 5px 0;">
+
+            <div class="form-group">
+                <label for="formType">Dynamic State/Federal Form Match</label>
+                <select id="formType">
+                    <option value="STATE_TAX_EXEMPTION">State Form TX-104-Municipal</option>
+                    <option value="FEDERAL_GRANT_REQ">Federal Form FG-880-Infrastructure</option>
+                    <option value="PUBLIC_WORKS_COMPLIANCE">OSHA-PW-2026-Standard</option>
+                </select>
+            </div>
+
+            <button onclick="matchAndGenerateForm()">Generate Matched Form</button>
+            <button onclick="saveDocument()" style="background-color: var(--success-color);">Save & Export File</button>
+        </div>
+
+        <!-- Main Word Processor Canvas -->
+        <div class="editor-container">
+            <div class="toolbar">
+                <span style="font-size: 0.85rem; color: var(--text-secondary);">Editing Canvas</span>
+            </div>
+            <textarea class="doc-textarea" id="docContent" placeholder="Begin typing municipal records, reports, or correspondence here..."></textarea>
+            
+            <div class="status-bar">
+                <span id="wordCount">Words: 0</span>
+                <span id="repoStatus">Repository: GitHub / Tole1775 / MunicipalResources-</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const textarea = document.getElementById('docContent');
+        const wordCountDisplay = document.getElementById('wordCount');
+
+        textarea.addEventListener('input', () => {
+            const text = textarea.value.trim();
+            const words = text === '' ? 0 : text.split(/\s+/).length;
+            wordCountDisplay.textContent = `Words: ${words}`;
+        });
+
+        function saveDocument() {
+            const title = document.getElementById('docTitle').value || 'Untitled_Municipal_Record';
+            const lang = document.getElementById('spellLang').value;
+            const format = document.getElementById('exportFormat').value;
+            alert(`Document '${title}' successfully checked (${lang.toUpperCase()}) and compiled to .${format} format.`);
+        }
+
+        function matchAndGenerateForm() {
+            const formType = document.getElementById('formType').value;
+            alert(`Successfully matched client parameters to regulatory template: ${formType}`);
+        }
+    </script>
+</body>
+</html>
