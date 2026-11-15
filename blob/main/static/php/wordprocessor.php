@@ -1,7 +1,7 @@
 <?php
 /**
  * MunicipalResources Secure Word Processor & Form Engine
- * Native PHP execution environment referencing Trust-Main central repository CSS.
+ * Renders with Trust-Main central repository CSS and TrustShell role themes.
  */
 session_start();
 $user_role = $_SESSION['user_role'] ?? 'admin';
@@ -78,7 +78,7 @@ $theme_class = match ($user_role) {
                 
                 <div class="editor-footer">
                     <span>CSR Key Wrapper: Active</span>
-                    <span>Checksum Integrity: Verified</span>
+                    <span id="checksumStatus">Checksum Integrity: Pending</span>
                 </div>
             </section>
 
@@ -90,6 +90,7 @@ $theme_class = match ($user_role) {
     <script>
         const textarea = document.getElementById('docContent');
         const wordCountDisplay = document.getElementById('wordCount');
+        const checksumStatus = document.getElementById('checksumStatus');
 
         textarea.addEventListener('input', () => {
             const text = textarea.value.trim();
@@ -97,11 +98,42 @@ $theme_class = match ($user_role) {
             wordCountDisplay.textContent = `WORDS: ${words}`;
         });
 
-        function saveDocument() {
+        async function saveDocument() {
             const title = document.getElementById('docTitle').value || 'Untitled_Municipal_Record';
+            const content = textarea.value;
             const lang = document.getElementById('spellLang').value;
             const format = document.getElementById('exportFormat').value;
-            alert(`[SUCCESS] Document '${title}' verified (${lang.toUpperCase()}) and compiled to .${format}.`);
+
+            if (!content.trim()) {
+                alert('[ERROR] Cannot save empty document canvas.');
+                return;
+            }
+
+            const formData = new URLSearchParams();
+            formData.append('title', title);
+            formData.append('content', content);
+            formData.append('lang', lang);
+            formData.append('format', format);
+
+            try {
+                // Post to backend compilation bridge
+                const response = await fetch('compile_document.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.status === 'success') {
+                    checksumStatus.textContent = `Checksum: ${result.checksum.substring(0, 16)}...`;
+                    alert(`[SUCCESS] ${result.message}\nSHA-256: ${result.checksum}\nExport Format: .${format.toUpperCase()}`);
+                } else {
+                    alert(`[ERROR] ${result.message || 'Compilation failed.'}`);
+                }
+            } catch (err) {
+                alert('[CRITICAL] Network communication with backend compilation bridge failed.');
+            }
         }
 
         function matchAndGenerateForm() {
