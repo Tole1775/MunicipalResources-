@@ -1,0 +1,21 @@
+Trust-municipal-core/
+├── core/
+│   ├── tcb/                      # Tier-0 Hardware Root of Trust (TEE/RTC bindings)
+│   ├── trust_shell/              # 30 GB Isolated Client & Cloud-OS Bridge Engine
+│   ├── annon_handshake/          # Cryptographic Packet Verification & Auto-Deletion Daemon
+│   └── merkel_ledger/            # Append-Only Immutable Chain-of-Custody & State Ledger
+├── modules/
+│   ├── forensic_telemetry/       # LiDAR, Thermal, Acoustic, & ePCR Capture Pipelines
+│   ├── municipal_accounting/     # Real-Time Transaction, Asset, & Payroll Engine
+│   ├── civil_registry/           # Property Titles, Tax Compliance, & Vital Statistics
+│   └── contractor_oversight/     # 811 Locate, Utility Grid, & Volumetric Grade Verification
+├── daemons/
+│   ├── reporting_daemons/        # Automated Weekly Executive Summary & Invoice Dispatchers
+│   ├── throttling_miner/         # Resource-Aware Background BTC Micro-Mining Engine
+│   └── audit_sentinel/           # Continuous Anti-Tamper & Model Contradiction Fault Monitor
+├── client/
+│   ├── trust_shell_client/       # Lightweight 30 GB Offline/Cloud Client Binary
+│   └── voice_gateway/            # Quad-Factor Voice Authentication & Hands-Free Command Parser
+└── config/
+    ├── security_layers/          # 2,000-Layer Modular Defense Policies & Rulesets
+    └── municipal_schemas/        # Deterministic Physics & Compliance Boundary Definitions
