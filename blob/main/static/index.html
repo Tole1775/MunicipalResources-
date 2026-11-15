@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- https://github.com/PMR-Pubclications/Municipal-Resources/blob/main/static/index.html -->
+    <!-- https://github.com/PMR-Pubclications/MunicipalResources/blob/main/static/index.html -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Municipal Resources // Secure Data Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>MunicipalResources // Secure Data Portal</title>
+    <!-- Integrated System Stylesheet -->
+    <link rel="stylesheet" href="https://github.com/PMR-Pubclications/Trust-Main/blob/main/asset%2Fcss%2Fstyle.css">
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen p-6">
     <div class="max-w-4xl mx-auto space-y-8">
@@ -13,7 +14,7 @@
         <!-- Header -->
         <header class="border-b border-slate-800 pb-4 flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-bold tracking-wider uppercase text-emerald-400">Municipal Resources</h1>
+                <h1 class="text-2xl font-bold tracking-wider uppercase text-emerald-400">MunicipalResources</h1>
                 <p class="text-xs text-slate-400">Isolated Zero-Trust Data Entry & Ledger Module</p>
             </div>
             <div class="h-3 w-3 bg-emerald-500 rounded-full animate-pulse"></div>
@@ -112,7 +113,6 @@
             }
         });
 
-        // Initial load & poll sync
         fetchRecords();
         setInterval(fetchRecords, 5000);
     </script>
