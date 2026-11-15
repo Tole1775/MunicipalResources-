@@ -31,3 +31,30 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+
+# --- Cryptographic & Security Keys ---
+*.pem
+*.key
+*.cer
+*.der
+secrets.json
+*.env
+*.secret
+
+# --- Local Ledger & Database Caches ---
+*.sqlite
+*.db
+*.wal
+*.shm
+data/local_ledger/
+
+# --- Temporary Build & Obfuscation Artifacts ---
+*.o
+*.obj
+*.dll
+*.so
+*.dylib
+dist/
+build/
+
